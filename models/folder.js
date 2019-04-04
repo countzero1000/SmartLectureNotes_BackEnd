@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const Schema = new mongoose.Schema({
+const folderSchema = new mongoose.Schema({
 
     _id: Schema.Types.ObjectId,
     name: String,
-    documents : {type :Schema.Types.ObjectId , ref : 'documents'},
+    documents : [{type :Schema.Types.ObjectId , ref : 'documents'}],
     
 
 
 })
 
-module.exports = mongoose.model('document',documentSchema);
+module.exports = mongoose.model('folder',folderSchema);

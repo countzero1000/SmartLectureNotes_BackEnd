@@ -6,8 +6,8 @@ let document = require('../models/document');
 let user = require('../models/user');
 let bodyParser = require('body-parser');
 const fileUploader = require('express-fileupload');
-let Course = require('ex');
-
+let Course = require('../models/course');
+const escapeStringRegexp = require('escape-string-regexp');
 
 
 router.use(fileUploader());
@@ -42,7 +42,7 @@ router.post('/getUserCourses', function(req,res){
 
 //params: folder name, also needs to
 //does: responds with all documents in given folder
-router.post('/getAllDocuments',function(req,res){
+router.get('/getAllDocuments',function(req,res){
 
   Folder.
   findOne({name : req.body.name})
@@ -56,9 +56,11 @@ router.post('/getAllDocuments',function(req,res){
 
 
 
+
+
 //params: user _id, name of course
 //creates a course under specified user
-router.post('/addCourse', function(){
+router.post('/addCourse', function(req, res){
 
   user.findOne({_id:req.body.id}).then(user => {
 
@@ -66,7 +68,7 @@ router.post('/addCourse', function(){
 
     let course = new Course({
       name : req.body.name,
-      id : courseId
+      _id : courseId
     })
 
     user.courses.push(courseId);
@@ -83,9 +85,9 @@ router.post('/addCourse', function(){
 //params: needs courseName, folder name
 router.post('/addFolder',function(req,res){
 
-    user.findOne({_id:req.body.id})
+    Course.findOne({name:req.body.courseName})
 
-    .then( user => {
+    .then( course => {
 
       let foldId = new mongoose.Types.ObjectId();
 
@@ -96,8 +98,8 @@ router.post('/addFolder',function(req,res){
 
       })
 
-    user.folders.push(foldId);
-    user.save();
+    course.folders.push(foldId);
+    course.save();
 
     folder.save();
     res.send(folder);
@@ -106,16 +108,15 @@ router.post('/addFolder',function(req,res){
 })
 
 
-// this needs something
-router.get('/wordSearch', function(req,res){
+//this needs something
+router.post('/wordSearch', function(req,res){
 
   var phrase = req.body.search;
-  
+  let sanitized = escapeStringRegexp(phrase);
 
-  console.log(req.body);
+  console.log(sanitized);
 
-
-  document.find({content: new RegExp(phrase)}, function(err,docs){
+  document.find({content: new RegExp(sanitized)}, function(err,docs){
     
     let names = new Array;
 
