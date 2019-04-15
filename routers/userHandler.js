@@ -7,9 +7,6 @@ let bodyParser = require('body-parser');
 
 router.use(fileUploader());
 
-mongoose.connect('mongodb://localhost:27017/folders',{
-  useNewUrlParser: true
-});
 
 
 router.use(bodyParser.urlencoded({
@@ -31,7 +28,6 @@ router.post('/createAccount',function(req,res){
 
 
     user.save();
-
     res.send(user);
 
 })
