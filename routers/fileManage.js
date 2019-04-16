@@ -10,11 +10,6 @@ let Course = require('../models/course');
 const escapeStringRegexp = require('escape-string-regexp');
 
 
-
-
-
-
-
 router.use(fileUploader());
 
 router.use(bodyParser.urlencoded({
@@ -112,7 +107,7 @@ router.post('/textSearch/:search', function(req,res){
 
 
 
-router.post('/fetchAll', function(req,res){
+router.get('/fetchAll', function(req,res){
   
   Course.find({})
   .populate({path:'folders',populate : { path : 'documents'}})
