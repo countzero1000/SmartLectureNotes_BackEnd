@@ -75,7 +75,7 @@ router.post('/addDocument/:folderId',function(req,res){
     title: req.body.title,
     desc: req.body.desc,
     content: req.body.content,
-    image: req.files.image,
+    image: req.files.image.data,
 
     })
 
