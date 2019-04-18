@@ -61,7 +61,7 @@ router.post('/addFolder/:courseId',function(req,res){
 
 
 router.post('/addDocument/:folderId',function(req,res){
-
+  
   Folder.findOne({_id:req.params.folderId}).then(folder =>{
    
     let docId = new mongoose.Types.ObjectId();
@@ -69,7 +69,7 @@ router.post('/addDocument/:folderId',function(req,res){
     let taglist = [];
     let str = req.body.tags;
     let buf = "";
-
+    
     for( let i = 0; i < str.length; i++){
       if(str[i] == " "){
         taglist.push(buf);
@@ -80,7 +80,10 @@ router.post('/addDocument/:folderId',function(req,res){
 
       }
     }
+    taglist.push(buf);
 
+    
+    
     let imageId = new mongoose.Types.ObjectId();
 
     let image = new Image({
@@ -141,7 +144,7 @@ router.post('/textSearch/:search', function(req,res){
 router.get('/fetchAll', function(req,res){
   
   Course.find({})
-  .populate({path:'folders'})
+  .populate({path:'folders',populate:{path:'documents'}})
   .exec(function(err,course){
 
     res.send(course);
