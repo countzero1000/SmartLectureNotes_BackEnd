@@ -3,11 +3,13 @@ let router  = express.Router();
 let mongoose = require('mongoose');
 let Folder = require('../models/folder');
 let Document = require('../models/document');
-
+let Image = require('../models/image');
 let bodyParser = require('body-parser');
 const fileUploader = require('express-fileupload');
 let Course = require('../models/course');
 const escapeStringRegexp = require('escape-string-regexp');
+
+
 
 
 router.use(fileUploader());
@@ -61,8 +63,34 @@ router.post('/addFolder/:courseId',function(req,res){
 router.post('/addDocument/:folderId',function(req,res){
 
   Folder.findOne({_id:req.params.folderId}).then(folder =>{
-    console.log(folder);
+   
     let docId = new mongoose.Types.ObjectId();
+
+    let taglist = [];
+    let str = req.body.tags;
+    let buf = "";
+
+    for( let i = 0; i < str.length; i++){
+      if(str[i] == " "){
+        taglist.push(buf);
+        buf = "";
+      }else{
+
+        buf += str[i];
+
+      }
+    }
+
+    let imageId = new mongoose.Types.ObjectId();
+
+    let image = new Image({
+      _id: imageId,
+      imageType: req.files.image.mimetype,
+      data : req.files.image.data
+
+    })
+
+    console.log(req.files);
 
     let doc = new Document({
   
@@ -70,14 +98,17 @@ router.post('/addDocument/:folderId',function(req,res){
     title: req.body.title,
     desc: req.body.desc,
     content: req.body.content,
-    image: req.files.image.data,
+    image: imageId,
+    tags: taglist
 
     })
 
+    image.save();
     folder.documents.push(docId);
     folder.save();
     doc.save();
     res.send(doc);
+    
 
   })
 
@@ -110,7 +141,7 @@ router.post('/textSearch/:search', function(req,res){
 router.get('/fetchAll', function(req,res){
   
   Course.find({})
-  .populate({path:'folders',populate : { path : 'documents'}})
+  .populate({path:'folders'})
   .exec(function(err,course){
 
     res.send(course);
@@ -118,6 +149,20 @@ router.get('/fetchAll', function(req,res){
   })
 })
   
+
+router.get('/image/:imageId', function(req,res){
+
+  Image.findById({_id:req.params.imageId}).then(image =>{
+
+    res.contentType(image.imageType);
+    res.send(image.data);
+  })
+
+
+})
+  
+
+
 
 
 
