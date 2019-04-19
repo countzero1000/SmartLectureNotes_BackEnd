@@ -16,7 +16,7 @@ router.use(fileUploader());
 router.post('/',function(req,res) {
   
 
-    let imageFile = req.files.image.data;
+    let imageFile = req.files.photo.data;
     
     jimp.read(imageFile).then(grayImage => {
     

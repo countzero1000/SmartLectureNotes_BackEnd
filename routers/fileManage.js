@@ -88,8 +88,8 @@ router.post('/addDocument/:folderId',function(req,res){
 
     let image = new Image({
       _id: imageId,
-      imageType: req.files.image.mimetype,
-      data : req.files.image.data
+      imageType: req.files.photo.mimetype,
+      data : req.files.photo.data
 
     })
 
