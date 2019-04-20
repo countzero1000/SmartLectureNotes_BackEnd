@@ -8,7 +8,7 @@ let bodyParser = require('body-parser');
 const fileUploader = require('express-fileupload');
 let Course = require('../models/course');
 const escapeStringRegexp = require('escape-string-regexp');
-
+const uriconverter = require('data-uri-to-buffer');
 
 
 
@@ -86,10 +86,14 @@ router.post('/addDocument/:folderId',function(req,res){
     
     let imageId = new mongoose.Types.ObjectId();
 
+    let uri = req.body.image
+    let dataType = 'image/' + uri.split('.').pop()
+    let buffer = uriconverter(uri);
+
     let image = new Image({
       _id: imageId,
-      imageType: req.files.photo.mimetype,
-      data : req.files.photo.data
+      imageType: dataType,
+      data : buffer
 
     })
 
