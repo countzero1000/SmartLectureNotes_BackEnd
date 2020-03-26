@@ -1,16 +1,9 @@
-#USERHANDLER ROUTES - /user
+#SmartLectureNotes_BackEnd
 
-post
-    /createAccount - createsUser 
-        takes in : username
-                   password
-    /login - sends the user's _id 
+I wrote this to handle the backend functionality of my teams app. We ended up winning ACM projects 
+spring 2019. 
 
-
-
-#FILEMANAGE ROUTES
-
-#PROCESSIMAGE ROUTES
+It uses mongodb and express.js
 
 
 
