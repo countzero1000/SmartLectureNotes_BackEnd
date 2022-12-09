@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "data-uri-to-buffer": "^2.0.1",
     "escape-string-regexp": "^1.0.5",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "express-busboy": "^7.0.1",
     "express-fileupload": "^1.1.4",
     "image-filter-gamma": "^1.0.0",
